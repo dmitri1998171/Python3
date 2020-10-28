@@ -16,10 +16,11 @@ k = 0.5
 j = k/4
 
 angle = 0
-lx, lz = 0,  5
-camX, camY, camZ = 0, 2, -4
+lx, ly, lz = 0, 0, 5
+camX, camY, camZ = 0, 1, -4
 deltaAngle, deltaMove = 0, 0
 xOrigin = -1
+yOrigin = -1
 
 def reshape(width, height):
     glViewport(0, 0, width, height)
@@ -153,8 +154,8 @@ def draw():
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glLoadIdentity()
     print("tx: ", camX+lx, "\ttz: ", camZ+lz,"\tangle: ", angle)
-    gluLookAt(camX,    1, camZ, 
-              camX+lx, 1, camZ+lz,
+    gluLookAt(camX,    camY, camZ, 
+              camX+lx, camY+ly, camZ+lz,
               0.0,     1, 0.0)
     # glLightfv(GL_LIGHT0, GL_POSITION, lightpos)
     # glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, (255,0,0))
@@ -203,29 +204,34 @@ def releaseKey(key, x, y):
     # if key == b'd' or key == b'a':  deltaAngle = 0
     # if key == b'w' or key == b's':  deltaMove = 0
     
-    # if key == b'd': deltaAngle = 0
-    # if key == b'a': deltaAngle = 0
     if key == b'w': deltaMove = 0
     if key == b's': deltaMove = 0
 
 def mouseButton(button, state, x, y):
-    global xOrigin, angle
+    global xOrigin, yOrigin, angle
     if (button == GLUT_LEFT_BUTTON):
         if (state == GLUT_UP):
             angle += deltaAngle
             xOrigin = -1
+            yOrigin = -1
         else:
             xOrigin = x
+            yOrigin = y
 
 def mouseMove(x, y):
-    global xOrigin, angle, deltaAngle, lx, lz
+    global xOrigin, yOrigin, angle, deltaAngle, lx, ly, lz
     if (xOrigin >= 0):
-        deltaAngle = (x - xOrigin) * 0.01
+        deltaAngle = -(x - xOrigin) * 0.01
         lx = math.sin(angle + deltaAngle)
         lz = math.cos(angle + deltaAngle)
+    if (yOrigin >= 0):
+        deltaAngle = -(y - yOrigin) * 0.01
+        ly = math.sin(angle + deltaAngle)
 
 def init():
     glClearColor(0.5, 0.5, 0.5, 1.0)                # Серый цвет для первоначальной закраски
+    glEnable(GL_DEPTH_TEST)
+    glutSetCursor(GLUT_CURSOR_NONE)
     lightFunc()
     textureInit()
 
@@ -243,7 +249,7 @@ glutMouseFunc(mouseButton)
 glutMotionFunc(mouseMove)
 # glutIgnoreKeyRepeat(1)
 glutSpecialUpFunc(releaseKey)
-glEnable(GL_DEPTH_TEST)
+
 init()
 
 texture = loadTexture ( "/home/dmitry/Desktop/1/stone.tga" )
