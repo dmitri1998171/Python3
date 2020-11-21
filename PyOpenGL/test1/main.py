@@ -284,6 +284,6 @@ glutPassiveMotionFunc(passiveMouseMove)
 
 init()
 
-texture = loadTexture ( "/home/dmitry/Desktop/1/stone.tga" )
+texture = loadTexture ( "./textures/grass.png" )
 
 glutMainLoop()
