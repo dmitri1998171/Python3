@@ -3,7 +3,6 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter import filedialog
 
-
 #===============================================
 def openFunc():
 	try:
@@ -54,11 +53,4 @@ try:
 	root.title("Notepad_python3")
 	root.mainloop()
 except(KeyboardInterrupt): root.quit()
-
-
-
-
-
-
-
 
